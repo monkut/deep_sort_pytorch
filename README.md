@@ -2,32 +2,17 @@
 
 ![](demo/demo.gif)
 
-## Update(1-1-2020)
-Changes
-- fix bugs
-- refactor code
-- accerate detection by adding nms on gpu
-
-## Latest Update(07-22)
-Changes
-- bug fix (Thanks @JieChen91 and @yingsen1 for bug reporting).  
-- using batch for feature extracting for each frame, which lead to a small speed up.  
-- code improvement.
-
-Futher improvement direction  
-- Train detector on specific dataset rather than the official one.
-- Retrain REID model on pedestrain dataset for better performance.
-- Replace YOLOv3 detector with advanced ones.
-
-Any contributions to this repository is welcome!
-
-
 ## Introduction
-This is an implement of MOT tracking algorithm deep sort. Deep sort is basicly the same with sort but added a CNN model to extract features in image of human part bounded by a detector. This CNN model is indeed a RE-ID model and the detector used in [PAPER](https://arxiv.org/abs/1703.07402) is FasterRCNN , and the original source code is [HERE](https://github.com/nwojke/deep_sort).  
-However in original code, the CNN model is implemented with tensorflow, which I'm not familier with. SO I re-implemented the CNN feature extraction model with PyTorch, and changed the CNN model a little bit. Also, I use **YOLOv3** to generate bboxes instead of FasterRCNN.
+This is an implementation of MOT (Multiple Object Tracking) tracking algorithm deep sort. 
+Deep sort is basically the same with sort but has an added CNN model to extract features in image of human part bounded by a detector.
+ 
+This CNN model is indeed a RE-ID model and the detector used in [PAPER](https://arxiv.org/abs/1703.07402) using FasterRCNN, 
+and the original source code is [HERE](https://github.com/nwojke/deep_sort).  
+
+This implementation replaces the tensorflow-based CNN modle with a PyTorch implementation, and replaces FasterRCNN with YOLOv3 for bbox generation.
 
 ## Dependencies
-- python 3 (python2 not sure)
+- python 3
 - numpy
 - scipy
 - opencv-python
@@ -39,23 +24,31 @@ However in original code, the CNN model is implemented with tensorflow, which I'
 - edict
 
 ## Quick Start
+
+Pre-requisites:
+
+- [pre-commit](https://pre-commit.com/)
+- [pipenv](https://pipenv-fork.readthedocs.io/en/latest/)
+
+
 0. Check all dependencies installed
 ```bash
-pip install -r requirements.txt
-```
-for user in china, you can specify pypi source to accelerate install like:
-```bash
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pipenv install
+
+# configure pre-commit hooks (black, isort)
+pre-commit install
 ```
 
-1. Clone this repository
-```
-git clone git@github.com:ZQPei/deep_sort_pytorch.git
-```
+1. Download YOLOv3 parameters
 
-2. Download YOLOv3 parameters
+    ```bash
+    make get-yolov3-weights
+    ```
+
+OR 
+
 ```
-cd detector/YOLOv3/weight/
+cd detector/YOLOv3/weights/
 wget https://pjreddie.com/media/files/yolov3.weights
 wget https://pjreddie.com/media/files/yolov3-tiny.weights
 cd ../../../
